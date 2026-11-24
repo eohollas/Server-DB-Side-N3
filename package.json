@@ -1,0 +1,22 @@
+{
+  "name": "veiculos-api",
+  "version": "1.0.0",
+  "description": "N3 - API REST de proprietários e veículos (Server Side + Banco de Dados) - Pedro Gabriel Hollas",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --watch --env-file-if-exists=.env src/server.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mariadb": "^3.4.5",
+    "sequelize": "^6.37.7",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.1.0"
+  }
+}

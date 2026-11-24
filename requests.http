@@ -1,0 +1,68 @@
+### Funciona no IntelliJ / VS Code (REST Client). Troque o token após o login.
+@host = http://localhost:3000
+
+### 1) Login -> copie o campo "token"
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{"username":"admin","senha":"admin123"}
+
+### 2) CRUD
+@token = COLE_O_TOKEN_AQUI
+
+POST {{host}}/api/proprietarios
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"cpf":"12345678909","nome":"Novo Dono","fone":"(47) 90000-0000"}
+
+###
+POST {{host}}/api/veiculos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"placa":"AAA-1B23","modelo":"Honda Civic","preco":75000.00,"cpfProprietario":"12345678909"}
+
+###
+PUT {{host}}/api/veiculos/AAA1B23
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"modelo":"Honda Civic","preco":130000.00,"cpfProprietario":"12345678909"}
+
+###
+DELETE {{host}}/api/veiculos/AAA1B23
+Authorization: Bearer {{token}}
+
+### 3) Consultas por proprietário e tipo (públicas)
+GET {{host}}/api/veiculos?cpf=52998224725
+###
+GET {{host}}/api/veiculos?tipo=luxo
+###
+GET {{host}}/api/veiculos?cpf=52998224725&tipo=super luxo
+###
+GET {{host}}/api/proprietarios/52998224725/veiculos
+
+### 4) Itens de BD
+GET {{host}}/api/bd/consultas/1
+###
+GET {{host}}/api/bd/consultas/2
+###
+GET {{host}}/api/bd/consultas/3?minCategorias=2
+###
+GET {{host}}/api/bd/views/1
+###
+GET {{host}}/api/bd/views/2
+###
+GET {{host}}/api/bd/triggers/1/ABC1D23
+###
+GET {{host}}/api/bd/triggers/2
+###
+POST {{host}}/api/bd/procedures/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{"idTipo":1,"percentual":10}
+
+###
+GET {{host}}/api/bd/procedures/2/52998224725
