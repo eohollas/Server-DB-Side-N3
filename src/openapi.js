@@ -24,7 +24,7 @@ module.exports = {
   info: {
     title: 'API de Proprietários e Veículos - N3',
     version: '1.0.0',
-    description: 'Server Side + Banco de Dados. Autor: Pedro Gabriel Hollas - Engenharia de Software.\n\nFaça login em /auth/login, copie o token e clique em **Authorize**.',
+    description: 'Server Side + Banco de Dados. Autores: Pedro Gabriel Hollas e João Pedro Cardozo - Engenharia de Software.\n\nFaça login em /auth/login, copie o token e clique em **Authorize**.',
   },
   components: {
     securitySchemes: { bearer: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } },

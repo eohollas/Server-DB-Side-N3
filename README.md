@@ -1,6 +1,6 @@
 # API de Proprietários e Veículos — N3 (Server Side + Banco de Dados)
 
-Autor: **Pedro Gabriel Hollas** — Engenharia de Software.
+Autores: **Pedro Gabriel Hollas** e **João Pedro Cardozo** — Engenharia de Software.
 
 Um único projeto em **Node.js** atende às duas disciplinas:
 

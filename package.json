@@ -1,7 +1,7 @@
 {
   "name": "veiculos-api",
   "version": "1.0.0",
-  "description": "N3 - API REST de proprietários e veículos (Server Side + Banco de Dados) - Pedro Gabriel Hollas",
+  "description": "N3 - API REST de proprietários e veículos (Server Side + Banco de Dados) - Pedro Gabriel Hollas e João Pedro Cardozo",
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {

@@ -254,7 +254,7 @@ Os comentários foram retirados dos arquivos de código (JavaScript e SQL). Aqui
 
 - Trecho: `CREATE TABLE tipo_veiculo (`
   > N3 - Server Side + Banco de Dados
-  > Autor: Pedro Gabriel Hollas - Engenharia de Software
+  > Autores: Pedro Gabriel Hollas e João Pedro Cardozo - Engenharia de Software
   > V1: estrutura das tabelas (MariaDB)
 
 - Trecho: `CREATE TABLE historico_preco (`
