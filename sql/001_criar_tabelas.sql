@@ -1,60 +1,61 @@
-CREATE TABLE tipo_veiculo (
-    id_tipo INT          NOT NULL AUTO_INCREMENT,
-    tipo    VARCHAR(30)  NOT NULL,
-    CONSTRAINT pk_tipo_veiculo PRIMARY KEY (id_tipo),
-    CONSTRAINT uk_tipo_veiculo_tipo UNIQUE (tipo)
-) ENGINE = InnoDB;
+-- N3: proprietarios e veiculos (estilo das aulas: create table / primary key / foreign key ... references)
 
-CREATE TABLE proprietario (
-    cpf  VARCHAR(11)  NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    fone VARCHAR(20),
-    CONSTRAINT pk_proprietario PRIMARY KEY (cpf)
-) ENGINE = InnoDB;
+create table tipo_veiculo (
+    id_tipo int not null auto_increment,
+    tipo    varchar(30) not null,
+    primary key (id_tipo),
+    unique (tipo)
+) engine = InnoDB;
 
-CREATE TABLE veiculo (
-    placa_veiculo    VARCHAR(8)     NOT NULL,
-    modelo_veiculo   VARCHAR(80)    NOT NULL,
-    preco_veiculo    DECIMAL(12, 2) NOT NULL,
-    cpf_proprietario VARCHAR(11)    NOT NULL,
-    id_tipo          INT            NOT NULL,
-    data_cadastro    DATETIME       NULL,
-    data_atualizacao DATETIME       NULL,
-    CONSTRAINT pk_veiculo PRIMARY KEY (placa_veiculo),
-    CONSTRAINT ck_veiculo_preco CHECK (preco_veiculo > 0),
-    CONSTRAINT fk_veiculo_proprietario FOREIGN KEY (cpf_proprietario)
-        REFERENCES proprietario (cpf) ON UPDATE CASCADE ON DELETE RESTRICT,
-    CONSTRAINT fk_veiculo_tipo FOREIGN KEY (id_tipo)
-        REFERENCES tipo_veiculo (id_tipo)
-) ENGINE = InnoDB;
+create table proprietario (
+    cpf  varchar(11)  not null,
+    nome varchar(100) not null,
+    fone varchar(20),
+    primary key (cpf)
+) engine = InnoDB;
 
-CREATE INDEX ix_veiculo_proprietario ON veiculo (cpf_proprietario);
-CREATE INDEX ix_veiculo_tipo ON veiculo (id_tipo);
+create table veiculo (
+    placa_veiculo    varchar(8)     not null,
+    modelo_veiculo   varchar(80)    not null,
+    preco_veiculo    decimal(12, 2) not null,
+    cpf_proprietario varchar(11)    not null,
+    id_tipo          int            not null,
+    data_cadastro    datetime       null,
+    data_atualizacao datetime       null,
+    primary key (placa_veiculo),
+    check (preco_veiculo > 0),
+    foreign key (cpf_proprietario) references proprietario (cpf)
+        on update cascade on delete restrict,
+    foreign key (id_tipo) references tipo_veiculo (id_tipo)
+) engine = InnoDB;
 
-CREATE TABLE historico_preco (
-    id_historico     BIGINT         NOT NULL AUTO_INCREMENT,
-    placa_veiculo    VARCHAR(8)     NOT NULL,
-    preco_anterior   DECIMAL(12, 2) NOT NULL,
-    preco_novo       DECIMAL(12, 2) NOT NULL,
-    id_tipo_anterior INT            NOT NULL,
-    id_tipo_novo     INT            NOT NULL,
-    data_alteracao   DATETIME       NOT NULL,
-    usuario_banco    VARCHAR(100)   NOT NULL,
-    CONSTRAINT pk_historico_preco PRIMARY KEY (id_historico)
-) ENGINE = InnoDB;
+create index ix_veiculo_proprietario on veiculo (cpf_proprietario);
+create index ix_veiculo_tipo on veiculo (id_tipo);
 
-CREATE INDEX ix_historico_placa ON historico_preco (placa_veiculo);
+create table historico_preco (
+    id_historico     bigint         not null auto_increment,
+    placa_veiculo    varchar(8)     not null,
+    preco_anterior   decimal(12, 2) not null,
+    preco_novo       decimal(12, 2) not null,
+    id_tipo_anterior int            not null,
+    id_tipo_novo     int            not null,
+    data_alteracao   datetime       not null,
+    usuario_banco    varchar(100)   not null,
+    primary key (id_historico)
+) engine = InnoDB;
 
-CREATE TABLE usuario (
-    id_usuario BIGINT       NOT NULL AUTO_INCREMENT,
-    username   VARCHAR(50)  NOT NULL,
-    senha_hash VARCHAR(100) NOT NULL,
-    perfil     VARCHAR(20)  NOT NULL DEFAULT 'ADMIN',
-    CONSTRAINT pk_usuario PRIMARY KEY (id_usuario),
-    CONSTRAINT uk_usuario_username UNIQUE (username)
-) ENGINE = InnoDB;
+create index ix_historico_placa on historico_preco (placa_veiculo);
 
-INSERT INTO tipo_veiculo (id_tipo, tipo) VALUES
+create table usuario (
+    id_usuario bigint       not null auto_increment,
+    username   varchar(50)  not null,
+    senha_hash varchar(100) not null,
+    perfil     varchar(20)  not null default 'ADMIN',
+    primary key (id_usuario),
+    unique (username)
+) engine = InnoDB;
+
+insert into tipo_veiculo (id_tipo, tipo) values
     (1, 'popular'),
     (2, 'luxo'),
     (3, 'super luxo');

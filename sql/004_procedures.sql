@@ -1,78 +1,84 @@
-DELIMITER $$
-CREATE PROCEDURE sp_reajustar_precos_tipo(
-    IN  p_id_tipo    INT,
-    IN  p_percentual DECIMAL(6, 2),
-    OUT p_afetados   INT
+-- Stored procedures no padrao da Aula 08:
+-- delimiter ...; create procedure nome (parametros) begin ... end; call nome(args);
+-- Todos os joins sao INNER JOIN.
+
+delimiter $$
+
+-- 1) Procedure com parametros (IN/OUT) que faz UPDATE: reajusta o preco de um tipo
+create or replace procedure sp_reajustar_precos_tipo (
+    in  p_id_tipo    int,
+    in  p_percentual decimal(6, 2),
+    out p_afetados   int
 )
-BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
+begin
+    declare exit handler for sqlexception
+    begin
+        rollback;
+        resignal;
+    end;
 
-    IF NOT EXISTS (SELECT 1 FROM tipo_veiculo WHERE id_tipo = p_id_tipo) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Tipo de veiculo inexistente';
-    END IF;
+    if not exists (select 1 from tipo_veiculo where id_tipo = p_id_tipo) then
+        signal sqlstate '45000' set message_text = 'Tipo de veiculo inexistente';
+    end if;
 
-    IF p_percentual <= -100 OR p_percentual > 1000 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Percentual fora do intervalo permitido (-100, 1000]';
-    END IF;
+    if p_percentual <= -100 or p_percentual > 1000 then
+        signal sqlstate '45000' set message_text = 'Percentual fora do intervalo permitido (-100, 1000]';
+    end if;
 
-    START TRANSACTION;
+    start transaction;
 
-    DROP TEMPORARY TABLE IF EXISTS tmp_reajuste;
-    CREATE TEMPORARY TABLE tmp_reajuste AS
-        SELECT placa_veiculo,
-               ROUND(preco_veiculo * (1 + p_percentual / 100), 2) AS novo_preco
-        FROM veiculo
-        WHERE id_tipo = p_id_tipo;
+    drop temporary table if exists tmp_reajuste;
+    create temporary table tmp_reajuste as
+        select placa_veiculo,
+               round(preco_veiculo * (1 + p_percentual / 100), 2) as novo_preco
+        from veiculo
+        where id_tipo = p_id_tipo;
 
-    UPDATE veiculo v
-    JOIN tmp_reajuste r ON r.placa_veiculo = v.placa_veiculo
-    SET v.preco_veiculo = r.novo_preco,
-        v.id_tipo = CASE
-            WHEN r.novo_preco < 50000  THEN 1
-            WHEN r.novo_preco < 100000 THEN 2
-            ELSE 3
-        END;
+    update veiculo v
+    inner join tmp_reajuste r on r.placa_veiculo = v.placa_veiculo
+    set v.preco_veiculo = r.novo_preco,
+        v.id_tipo = case
+            when r.novo_preco < 50000  then 1
+            when r.novo_preco < 100000 then 2
+            else 3
+        end;
 
-    SET p_afetados = ROW_COUNT();
+    set p_afetados = row_count();
 
-    DROP TEMPORARY TABLE IF EXISTS tmp_reajuste;
-    COMMIT;
-END$$
-DELIMITER ;
+    drop temporary table if exists tmp_reajuste;
+    commit;
+end $$
 
-DELIMITER $$
-CREATE PROCEDURE sp_relatorio_proprietario(IN p_cpf VARCHAR(11))
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM proprietario WHERE cpf = p_cpf) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Proprietario nao encontrado';
-    END IF;
+-- 2) Procedure de consulta complexa reutilizavel: relatorio de um proprietario
+create or replace procedure sp_relatorio_proprietario (in p_cpf varchar(11))
+begin
+    if not exists (select 1 from proprietario where cpf = p_cpf) then
+        signal sqlstate '45000' set message_text = 'Proprietario nao encontrado';
+    end if;
 
-    WITH media_tipo AS (
-        SELECT id_tipo, ROUND(AVG(preco_veiculo), 2) AS media_categoria
-        FROM veiculo
-        GROUP BY id_tipo
+    with media_tipo as (
+        select id_tipo, round(avg(preco_veiculo), 2) as media_categoria
+        from veiculo
+        group by id_tipo
     )
-    SELECT
+    select
         p.cpf,
         p.nome,
         v.placa_veiculo,
         v.modelo_veiculo,
         t.tipo,
         v.preco_veiculo,
-        RANK() OVER (ORDER BY v.preco_veiculo DESC)                       AS ranking_no_patrimonio,
-        ROUND(v.preco_veiculo / SUM(v.preco_veiculo) OVER () * 100, 2)    AS pct_do_patrimonio,
-        SUM(v.preco_veiculo) OVER ()                                      AS patrimonio_total,
+        rank() over (order by v.preco_veiculo desc)                     as ranking_no_patrimonio,
+        round(v.preco_veiculo / sum(v.preco_veiculo) over () * 100, 2)  as pct_do_patrimonio,
+        sum(v.preco_veiculo) over ()                                    as patrimonio_total,
         m.media_categoria,
-        ROUND(v.preco_veiculo - m.media_categoria, 2)                     AS diferenca_media_categoria
-    FROM proprietario p
-    JOIN veiculo v      ON v.cpf_proprietario = p.cpf
-    JOIN tipo_veiculo t ON t.id_tipo = v.id_tipo
-    JOIN media_tipo m   ON m.id_tipo = v.id_tipo
-    WHERE p.cpf = p_cpf
-    ORDER BY ranking_no_patrimonio;
-END$$
-DELIMITER ;
+        round(v.preco_veiculo - m.media_categoria, 2)                   as diferenca_media_categoria
+    from proprietario p
+    inner join veiculo v      on v.cpf_proprietario = p.cpf
+    inner join tipo_veiculo t on t.id_tipo = v.id_tipo
+    inner join media_tipo m   on m.id_tipo = v.id_tipo
+    where p.cpf = p_cpf
+    order by ranking_no_patrimonio;
+end $$
+
+delimiter ;

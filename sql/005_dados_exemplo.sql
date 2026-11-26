@@ -1,11 +1,11 @@
-INSERT INTO proprietario (cpf, nome, fone) VALUES
+insert into proprietario (cpf, nome, fone) values
     ('52998224725', 'Ana Souza',        '(47) 99911-2233'),
     ('11144477735', 'Bruno Lima',       '(47) 98822-3344'),
     ('39053344705', 'Carla Mendes',     '(48) 99733-4455'),
     ('15350946056', 'Diego Ferreira',   '(41) 99644-5566'),
     ('71428793860', 'Eduarda Martins',  '(47) 99555-6677');
 
-INSERT INTO veiculo (placa_veiculo, modelo_veiculo, preco_veiculo, cpf_proprietario, id_tipo) VALUES
+insert into veiculo (placa_veiculo, modelo_veiculo, preco_veiculo, cpf_proprietario, id_tipo) values
     ('abc-1d23', 'Fiat Mobi',              42000.00, '52998224725', 1),
     ('ABC2E34',  'Toyota Corolla',         98000.00, '52998224725', 2),
     ('BRA3F45',  'Porsche Macan',         520000.00, '52998224725', 3),

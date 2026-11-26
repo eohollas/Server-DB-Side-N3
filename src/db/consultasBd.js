@@ -11,9 +11,9 @@ SELECT v.placa_veiculo,
        m.media_tipo,
        ROUND((v.preco_veiculo - m.media_tipo) / m.media_tipo * 100, 2) AS pct_acima_media
 FROM veiculo v
-JOIN proprietario p ON p.cpf = v.cpf_proprietario
-JOIN tipo_veiculo t ON t.id_tipo = v.id_tipo
-JOIN (SELECT id_tipo, ROUND(AVG(preco_veiculo), 2) AS media_tipo
+INNER JOIN proprietario p ON p.cpf = v.cpf_proprietario
+INNER JOIN tipo_veiculo t ON t.id_tipo = v.id_tipo
+INNER JOIN (SELECT id_tipo, ROUND(AVG(preco_veiculo), 2) AS media_tipo
       FROM veiculo
       GROUP BY id_tipo) m ON m.id_tipo = v.id_tipo
 WHERE v.preco_veiculo > m.media_tipo
@@ -30,7 +30,7 @@ SELECT t.id_tipo,
        ROUND(COUNT(v.placa_veiculo) * 100.0
              / NULLIF((SELECT COUNT(*) FROM veiculo), 0), 2) AS pct_da_frota
 FROM tipo_veiculo t
-LEFT JOIN veiculo v ON v.id_tipo = t.id_tipo
+INNER JOIN veiculo v ON v.id_tipo = t.id_tipo
 GROUP BY t.id_tipo, t.tipo
 ORDER BY t.id_tipo`.trim();
 
@@ -43,7 +43,7 @@ SELECT p.cpf,
        MIN(v.preco_veiculo)       AS veiculo_mais_barato,
        MAX(v.preco_veiculo)       AS veiculo_mais_caro
 FROM proprietario p
-JOIN veiculo v ON v.cpf_proprietario = p.cpf
+INNER JOIN veiculo v ON v.cpf_proprietario = p.cpf
 GROUP BY p.cpf, p.nome
 HAVING COUNT(DISTINCT v.id_tipo) >= ?
 ORDER BY qtd_categorias DESC, valor_total DESC`.trim();
