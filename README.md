@@ -60,7 +60,7 @@ No Swagger, clique em **Authorize** e cole o token.
 | GET | `/api/proprietarios/:cpf/veiculos[?tipo=luxo]` | Veículos do proprietário |
 | GET/POST | `/api/veiculos` | Listar (filtros `?cpf=` e `?tipo=`) / criar |
 | GET/PUT/DELETE | `/api/veiculos/:placa` | Buscar / alterar / excluir |
-| GET | `/api/bd/consultas/1`, `/2`, `/3?minCategorias=2` | Consultas complexas |
+| GET | `/api/bd/consultas/1`, `/2`, `/3?precoMinimo=100000` | Consultas complexas |
 | GET | `/api/bd/views/1`, `/views/2` | Views |
 | GET | `/api/bd/triggers/1/:placa`, `/triggers/2` | Efeito dos triggers |
 | POST | `/api/bd/procedures/1` | `sp_reajustar_precos_tipo` (JWT) |

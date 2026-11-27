@@ -1,10 +1,5 @@
--- Triggers no padrao da Aula 07:
--- create trigger nome tempo evento on tabela for each row begin ... end
--- new.coluna / old.coluna; signal sqlstate '45000' para barrar a operacao.
-
 delimiter $$
 
--- 1) BEFORE INSERT: padroniza a placa e carimba as datas
 create or replace trigger trg_veiculo_bi_padroniza
 before insert on veiculo
 for each row
@@ -14,7 +9,6 @@ begin
     set new.data_atualizacao = now();
 end $$
 
--- 2) AFTER UPDATE: grava o historico quando preco ou tipo mudam
 create or replace trigger trg_veiculo_au_historico
 after update on veiculo
 for each row
@@ -29,7 +23,6 @@ begin
     end if;
 end $$
 
--- 3) BEFORE UPDATE: atualiza data_atualizacao e protege data_cadastro
 create or replace trigger trg_veiculo_bu_data
 before update on veiculo
 for each row

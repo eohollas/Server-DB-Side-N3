@@ -35,18 +35,16 @@ GROUP BY t.id_tipo, t.tipo
 ORDER BY t.id_tipo`.trim();
 
 const SQL_CONSULTA_3 = `
-SELECT p.cpf,
-       p.nome,
-       COUNT(*)                   AS qtd_veiculos,
-       COUNT(DISTINCT v.id_tipo)  AS qtd_categorias,
-       SUM(v.preco_veiculo)       AS valor_total,
-       MIN(v.preco_veiculo)       AS veiculo_mais_barato,
-       MAX(v.preco_veiculo)       AS veiculo_mais_caro
-FROM proprietario p
-INNER JOIN veiculo v ON v.cpf_proprietario = p.cpf
-GROUP BY p.cpf, p.nome
-HAVING COUNT(DISTINCT v.id_tipo) >= ?
-ORDER BY qtd_categorias DESC, valor_total DESC`.trim();
+SELECT v.placa_veiculo,
+       v.modelo_veiculo,
+       v.preco_veiculo,
+       p.nome AS proprietario,
+       p.fone,
+       v.data_cadastro
+FROM veiculo v
+INNER JOIN proprietario p ON p.cpf = v.cpf_proprietario
+WHERE v.preco_veiculo >= ?
+ORDER BY v.preco_veiculo DESC`.trim();
 
 const SQL_VIEW_1 = 'SELECT * FROM vw_patrimonio_proprietario ORDER BY valor_total_frota DESC';
 const SQL_VIEW_2 = 'SELECT * FROM vw_historico_precos ORDER BY id_historico DESC';
@@ -71,7 +69,7 @@ module.exports = {
 
   consulta1: () => ler(SQL_CONSULTA_1),
   consulta2: () => ler(SQL_CONSULTA_2),
-  consulta3: (minCategorias) => ler(SQL_CONSULTA_3, [minCategorias]),
+  consulta3: (precoMinimo) => ler(SQL_CONSULTA_3, [precoMinimo]),
   view1: () => ler(SQL_VIEW_1),
   view2: () => ler(SQL_VIEW_2),
   triggerHistorico: () => ler(SQL_TRIGGER_HISTORICO),

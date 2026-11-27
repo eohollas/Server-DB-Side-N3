@@ -20,10 +20,10 @@ router.get('/consultas/2', async (req, res) => res.json(resultado('Consulta 2 (2
   SQL.SQL_CONSULTA_2, await bd.consulta2())));
 
 router.get('/consultas/3', async (req, res) => {
-  const min = Number(req.query.minCategorias ?? 2);
-  if (!Number.isInteger(min) || min < 1 || min > 3) throw new HttpError(400, 'minCategorias deve estar entre 1 e 3');
+  const min = Number(req.query.precoMinimo ?? 100000);
+  if (!Number.isFinite(min) || min < 0) throw new HttpError(400, 'precoMinimo deve ser um número maior ou igual a zero');
   res.json(resultado('Consulta 3 (2 tabelas)',
-    `Proprietários com veículos em pelo menos ${min} categorias diferentes.`,
+    `Lista de veículos com preço a partir de R$ ${min.toLocaleString('pt-BR')}, do mais caro ao mais barato, com nome e telefone do proprietário para contato.`,
     SQL.SQL_CONSULTA_3, await bd.consulta3(min)));
 });
 

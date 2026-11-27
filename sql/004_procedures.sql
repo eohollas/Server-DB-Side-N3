@@ -1,10 +1,5 @@
--- Stored procedures no padrao da Aula 08:
--- delimiter ...; create procedure nome (parametros) begin ... end; call nome(args);
--- Todos os joins sao INNER JOIN.
-
 delimiter $$
 
--- 1) Procedure com parametros (IN/OUT) que faz UPDATE: reajusta o preco de um tipo
 create or replace procedure sp_reajustar_precos_tipo (
     in  p_id_tipo    int,
     in  p_percentual decimal(6, 2),
@@ -49,7 +44,6 @@ begin
     commit;
 end $$
 
--- 2) Procedure de consulta complexa reutilizavel: relatorio de um proprietario
 create or replace procedure sp_relatorio_proprietario (in p_cpf varchar(11))
 begin
     if not exists (select 1 from proprietario where cpf = p_cpf) then

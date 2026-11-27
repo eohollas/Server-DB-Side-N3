@@ -1,6 +1,3 @@
--- Views: todos os joins sao INNER JOIN.
--- Atencao: proprietario sem veiculo nao aparece em vw_patrimonio_proprietario.
-
 create or replace view vw_patrimonio_proprietario as
 select
     p.cpf,
@@ -18,7 +15,6 @@ inner join veiculo v      on v.cpf_proprietario = p.cpf
 inner join tipo_veiculo t on t.id_tipo = v.id_tipo
 group by p.cpf, p.nome, p.fone;
 
--- Atencao: historico de veiculo que foi excluido nao aparece mais nesta view.
 create or replace view vw_historico_precos as
 select
     h.id_historico,

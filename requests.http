@@ -48,7 +48,7 @@ GET {{host}}/api/bd/consultas/1
 ###
 GET {{host}}/api/bd/consultas/2
 ###
-GET {{host}}/api/bd/consultas/3?minCategorias=2
+GET {{host}}/api/bd/consultas/3?precoMinimo=100000
 ###
 GET {{host}}/api/bd/views/1
 ###

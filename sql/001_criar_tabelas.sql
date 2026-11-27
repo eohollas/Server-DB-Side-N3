@@ -1,5 +1,3 @@
--- N3: proprietarios e veiculos (estilo das aulas: create table / primary key / foreign key ... references)
-
 create table tipo_veiculo (
     id_tipo int not null auto_increment,
     tipo    varchar(30) not null,

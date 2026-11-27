@@ -139,7 +139,7 @@ Os comentários foram retirados dos arquivos de código (JavaScript e SQL). Aqui
 
 - Trecho: `const SQL_CONSULTA_3 = '`
   > CONSULTA 3 (2 tabelas: proprietario, veiculo)
-  > Pergunta: quais proprietários têm frota diversificada (veículos em pelo menos N categorias)?
+  > Pergunta: quais veículos custam a partir de um valor mínimo (precoMinimo) e quem é o dono para contato?
 
 - Trecho: `function linhasDoCall(resultado) {`
   > CALL devolve as linhas do SELECT da procedure (mais um pacote de status no fim).
